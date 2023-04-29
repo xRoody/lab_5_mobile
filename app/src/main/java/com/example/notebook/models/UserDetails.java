@@ -38,12 +38,12 @@ public class UserDetails {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return LocalDate.parse(birthday);
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday.toString();
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getAvatar() {

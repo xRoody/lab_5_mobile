@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RegistrationActivity">
+    tools:context=".activity.RegistrationActivity">
 
 
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
-                  tools:context=".RegistrationActivity">
+                  tools:context=".activity.RegistrationActivity">
 
 
         <LinearLayout
@@ -92,7 +92,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.example.notebook.CameraFragment"
+                android:name="com.example.notebook.fragments.CameraFragment"
                 android:id="@+id/camera_reg_fragment"
                 android:padding="20px"
         />

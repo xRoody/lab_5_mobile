@@ -1,4 +1,4 @@
-package com.example.notebook;
+package com.example.notebook.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.notebook.R;
 import com.example.notebook.models.UserDetails;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -100,12 +101,13 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
+        final String login = email.substring(0, email.indexOf("@"));
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = task.getResult().getUser();
-                                writeNewUser(user.getUid(), user.getEmail().substring(0, user.getEmail().indexOf("@")), user.getEmail());
-                                writeUserData(user.getUid(), firstName, lastName, LocalDate.parse(birthday));
+                                writeUserData(user.getUid(), firstName, lastName, LocalDate.parse(birthday), login);
                             }
                         }
                 );
@@ -114,19 +116,12 @@ public class RegistrationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void writeNewUser(String userId, String name, String login) {
-        User user = new User(name, login);
-
-        mDatabase.child("users").child(userId).setValue(user);
-    }
-
-    private void writeUserData(String userId, String firstName, String lastName, LocalDate birthday) {
-        String detailKey = mDatabase.child("details").push().getKey();
+    private void writeUserData(String userId, String firstName, String lastName, LocalDate birthday, String login) {
         byte[] img;
         if (!args.containsKey("img")) {
             Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.png_transparent_default_avatar_thumbnail_photoroom_png_photoroom)).getBitmap();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             img = baos.toByteArray();
         } else {
             img = args.getByteArray("img");
@@ -135,14 +130,14 @@ public class RegistrationActivity extends AppCompatActivity {
         details.setUser(userId);
         details.setLastName(lastName);
         details.setFirstName(firstName);
-        details.setBirthday(birthday);
-        details.setId(detailKey);
+        details.setBirthday(birthday.toString());
+        details.setId(userId);
+        details.setLogin(login);
         saveImage(img, userId).addOnCompleteListener(task -> {
             details.setAvatar(task.getResult().toString());
             Map<String, Object> detailsMap = details.toMap();
             Map<String, Object> updates = new HashMap<>();
-            updates.put("/details/" + detailKey, detailsMap);
-            updates.put("/user-details/" + userId + "/" + detailKey, detailsMap);
+            updates.put("/details/" + userId, detailsMap);
             mDatabase.updateChildren(updates).isSuccessful();
         });
     }
