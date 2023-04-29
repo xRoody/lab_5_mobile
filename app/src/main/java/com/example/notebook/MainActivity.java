@@ -1,74 +1,99 @@
 package com.example.notebook;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    ListView userList;
-    //TextView count;
-    DatabaseHelper dbHelper;
-    SQLiteDatabase db;
-    Cursor userCursor;
-    SimpleCursorAdapter userAdapter;
-
+    Button login;
+    Button register;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        userList=findViewById(R.id.list);
-
-        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), NotesActivity.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
-
-        dbHelper=new DatabaseHelper(getApplicationContext());
-
-    }
-    public void tagPages(View view) {
-        Intent intent = new Intent(this, TagActivity.class);
-        startActivity(intent);
-    }
-
-    public void add(View view){
-        Intent intent = new Intent(this, NotesActivity.class);
-        startActivity(intent);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        db=dbHelper.getReadableDatabase();
-        userCursor=db.rawQuery("SELECT notes._id, notes.date, notes.name FROM "+ DatabaseHelper.NOTES, null);
-        String[] dbArray = new String[]{DatabaseHelper.DATE, DatabaseHelper.NAME};
-
-        userAdapter=new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, userCursor, dbArray,
-                new int[]{android.R.id.text1, android.R.id.text2},0);
-
-        userList.setAdapter(userAdapter);
+        login = findViewById(R.id.loginButton);
+        register = findViewById(R.id.regButton);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        login.setOnClickListener(v -> signIn());
+        register.setOnClickListener(v -> signUp());
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-        userCursor.close();
+    public void onStart() {
+        super.onStart();
+        if (mAuth.getCurrentUser() != null) {
+            onAuthSuccess(mAuth.getCurrentUser());
+        }
+    }
+
+    private void signIn() {
+        if (!validateForm()) {
+            return;
+        }
+
+        String login = ((TextView) findViewById(R.id.name)).getText().toString();
+        String password = ((TextView) findViewById(R.id.passwordReg)).getText().toString();
+
+        mAuth.signInWithEmailAndPassword(login, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        onAuthSuccess(task.getResult().getUser());
+                    }
+                });
+    }
+
+    private void signUp() {
+        Intent intent = new Intent(this, RegistrationActivity.class);
+        startActivity(intent);
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String login = ((TextView) findViewById(R.id.name)).getText().toString();
+
+        writeNewUser(user.getUid(), login, user.getEmail());
+
+        //Intent intent = new Intent(this, NextActivity.class);
+        //intent.putExtra("userId", user.getUid());          //load user data by id in next activity
+        //startActivity(intent);
+    }
+
+    private boolean validateForm() {
+        boolean result = true;
+        String login = ((TextView) findViewById(R.id.name)).getText().toString();
+        if (TextUtils.isEmpty(login)) {
+            ((TextView) findViewById(R.id.name)).setError("Required");
+            result = false;
+        } else {
+            ((TextView) findViewById(R.id.name)).setError(null);
+        }
+
+        String password = ((TextView) findViewById(R.id.passwordReg)).getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            ((TextView) findViewById(R.id.passwordReg)).setError("Required");
+            result = false;
+        } else {
+            ((TextView) findViewById(R.id.passwordReg)).setError(null);
+        }
+
+        return result;
+    }
+
+    private void writeNewUser(String userId, String name, String login) {
+        User user = new User(name, login);
+
+        mDatabase.child("users").child(userId).setValue(user);
     }
 }

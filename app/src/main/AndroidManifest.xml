@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,16 +14,7 @@
         android:theme="@style/Theme.Notebook"
         tools:targetApi="31">
         <activity
-            android:name=".Addtag_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".DatabaseHelper"
-            android:exported="false" />
-        <activity
-            android:name=".NotesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TagActivity"
+            android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

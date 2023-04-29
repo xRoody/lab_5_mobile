@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,64 +8,62 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button"
-
-            android:layout_width="211dp"
-            android:layout_height="wrap_content"
-            android:background="#25A672"
-            android:text="Заметки"
-
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="MissingClass" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/button2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="#25A672"
-            android:onClick="tagPages"
-            android:text="Теги"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            tools:ignore="TextContrastCheck" />
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="407dp">
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/list"
+        <EditText
+                android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="710dp" />
+                android:layout_height="30pt"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="100px"
+                android:layout_marginTop="50px"
+                android:layout_weight="1"/>
+        <EditText
+                android:id="@+id/passwordReg"
+                android:layout_width="match_parent"
+                android:layout_height="30pt"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="100px"
+                android:layout_weight="1"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_weight="1">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/loginButton"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#25A672"
+                    android:text="Login"
+                    android:padding="30px"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingClass"/>
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/regButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#25A672"
+                    android:onClick="tagPages"
+                    android:text="Registration"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:padding="30px"
+                    android:layout_marginLeft="100px"
+                    tools:ignore="TextContrastCheck"/>
         </LinearLayout>
-    </ScrollView>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/button3"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:background="#25A672"
-        android:onClick="add"
-
-        android:text="Новая заметка"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        tools:ignore="TextContrastCheck" />
+    </LinearLayout>
 
 
 </LinearLayout>
