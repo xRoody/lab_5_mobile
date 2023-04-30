@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         register = findViewById(R.id.regButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-       // mAuth.signOut();
+        //mAuth.signOut();
         login.setOnClickListener(v -> signIn());
         register.setOnClickListener(v -> signUp());
     }

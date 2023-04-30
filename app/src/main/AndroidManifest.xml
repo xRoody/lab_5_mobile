@@ -19,6 +19,9 @@
             android:name=".activity.ChangeActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.MusicActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RegistrationActivity"
             android:exported="false" />
         <activity

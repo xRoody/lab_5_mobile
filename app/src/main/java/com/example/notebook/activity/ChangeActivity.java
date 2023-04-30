@@ -1,6 +1,7 @@
 package com.example.notebook.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -46,6 +47,10 @@ public class ChangeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change);
         init();
     }
+    private void musicPlayer() {
+        Intent intent = new Intent(this, MusicActivity.class);
+        startActivity(intent);
+    }
 
     private void init() {
         EditText eText = findViewById(R.id.birthdayEdit);
@@ -66,18 +71,26 @@ public class ChangeActivity extends AppCompatActivity {
             picker.show();
         });
         Button submit = findViewById(R.id.editSubmit);
+        System.out.println(userId);
+
         mDatabase.child("details/" + userId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         UserDetails details = task.getResult().getValue(UserDetails.class);
+                        System.out.println("HERE3");
+                        System.out.println(details);
                         writeDetails(details);
                     }
                 });
         submit.setOnClickListener((v) -> submitEdit());
+
+        Button musicPlayer=findViewById(R.id.musicPlayer);
+        musicPlayer.setOnClickListener(v -> musicPlayer());
     }
 
     private void writeDetails(UserDetails details) {
+
         ((TextView) findViewById(R.id.nameEdit)).setText(details.firstName);
         ((TextView) findViewById(R.id.lastNameEdit)).setText(details.lastName);
         ((TextView) findViewById(R.id.loginEdit)).setText(details.getLogin());
