@@ -1,6 +1,7 @@
 package com.example.notebook.activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -66,6 +67,7 @@ public class ChangeActivity extends AppCompatActivity {
             picker.show();
         });
         Button submit = findViewById(R.id.editSubmit);
+        Button resetPassword = findViewById(R.id.resetPass);
         mDatabase.child("details/" + userId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -75,12 +77,16 @@ public class ChangeActivity extends AppCompatActivity {
                     }
                 });
         submit.setOnClickListener((v) -> submitEdit());
+        resetPassword.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void writeDetails(UserDetails details) {
         ((TextView) findViewById(R.id.nameEdit)).setText(details.firstName);
         ((TextView) findViewById(R.id.lastNameEdit)).setText(details.lastName);
-        ((TextView) findViewById(R.id.loginEdit)).setText(details.getLogin());
+        ((TextView) findViewById(R.id.loginEdit)).setText(details.login);
         ((TextView) findViewById(R.id.birthdayEdit)).setText(details.birthday);
         ImageView avatar = getSupportFragmentManager().findFragmentById(R.id.camera_edit_fragment)
                 .getView()
@@ -112,7 +118,7 @@ public class ChangeActivity extends AppCompatActivity {
         );
     }
 
-    private void writeUserData(String userId, String firstName, String lastName, String birthday, String login, byte[] img) {
+    private void writeUserData(String userId, String firstName, String lastName, String login, String birthday,  byte[] img) {
         UserDetails details = new UserDetails();
         details.setUser(userId);
         details.setLastName(lastName);
