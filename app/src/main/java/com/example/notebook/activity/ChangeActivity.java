@@ -71,19 +71,20 @@ public class ChangeActivity extends AppCompatActivity {
             picker.show();
         });
         Button submit = findViewById(R.id.editSubmit);
-        System.out.println(userId);
-
+        Button resetPassword = findViewById(R.id.resetPass);
         mDatabase.child("details/" + userId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         UserDetails details = task.getResult().getValue(UserDetails.class);
-                        System.out.println("HERE3");
-                        System.out.println(details);
                         writeDetails(details);
                     }
                 });
         submit.setOnClickListener((v) -> submitEdit());
+        resetPassword.setOnClickListener((v) -> {
+            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            startActivity(intent);
+        });
 
         Button musicPlayer=findViewById(R.id.musicPlayer);
         musicPlayer.setOnClickListener(v -> musicPlayer());
@@ -93,7 +94,7 @@ public class ChangeActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.nameEdit)).setText(details.firstName);
         ((TextView) findViewById(R.id.lastNameEdit)).setText(details.lastName);
-        ((TextView) findViewById(R.id.loginEdit)).setText(details.getLogin());
+        ((TextView) findViewById(R.id.loginEdit)).setText(details.login);
         ((TextView) findViewById(R.id.birthdayEdit)).setText(details.birthday);
         ImageView avatar = getSupportFragmentManager().findFragmentById(R.id.camera_edit_fragment)
                 .getView()
@@ -125,7 +126,7 @@ public class ChangeActivity extends AppCompatActivity {
         );
     }
 
-    private void writeUserData(String userId, String firstName, String lastName, String birthday, String login, byte[] img) {
+    private void writeUserData(String userId, String firstName, String lastName, String login, String birthday,  byte[] img) {
         UserDetails details = new UserDetails();
         details.setUser(userId);
         details.setLastName(lastName);
