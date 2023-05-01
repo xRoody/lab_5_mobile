@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.text.InputType;
@@ -25,7 +24,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,12 +51,14 @@ public class ChangeActivity extends AppCompatActivity {
     }
 
     private void weather() {
-        Intent intent = new Intent(this, WeatherActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
+        intent.putExtra("userId",userId);
         startActivity(intent);
     }
 
 
     private void init() {
+        System.out.println();
         EditText eText = findViewById(R.id.birthdayEdit);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();

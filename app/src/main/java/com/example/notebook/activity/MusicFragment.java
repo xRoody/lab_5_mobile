@@ -36,11 +36,12 @@ public class MusicFragment extends Fragment {
             throw new RuntimeException(e);
         }
         mediaPlayer=MediaPlayer.create(getContext(),song_num);
-
         return inflater.inflate(R.layout.fragment_music, container, false);
     }
     @Override
     public void onViewCreated(View view,@Nullable Bundle savedInstanceState){
+        System.out.println(getView()+"  view");
+        System.out.println(R.id.frameLayout);
         getView().findViewById(R.id.stop).setOnClickListener(v -> stop());
         getView().findViewById(R.id.play).setOnClickListener(v -> mediaPlayer.start());
         getView().findViewById(R.id.pause).setOnClickListener(v -> mediaPlayer.pause());

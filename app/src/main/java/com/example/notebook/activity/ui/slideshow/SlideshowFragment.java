@@ -1,57 +1,53 @@
-package com.example.notebook.activity;
+package com.example.notebook.activity.ui.slideshow;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notebook.R;
+import com.example.notebook.activity.MenuActivity;
+import com.example.notebook.activity.WeatherActivity;
+import com.example.notebook.databinding.FragmentSlideshowBinding;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.net.URL;
 
-import kotlin.text.Charsets;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class WeatherActivity extends AppCompatActivity {
+public class SlideshowFragment extends Fragment {
+
     //example url https://api.openweathermap.org/data/2.5/weather?q=Saratov&appid=5c8a06c123a40d90cab8ee594cb17be7&units=metric
     //api key 5c8a06c123a40d90cab8ee594cb17be7
     String apiKey="5c8a06c123a40d90cab8ee594cb17be7";
     String defaultCity="Saratov";
+    EditText searchCity;
+    Button searchButton;
 
-
+    private FragmentSlideshowBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
-        EditText searchCity=findViewById(R.id.searchCity);
-        Button searchButton=findViewById(R.id.searchButton);
+    public void onViewCreated(View view,@Nullable Bundle savedInstanceState){
+        searchCity=getView().findViewById(R.id.searchCityNew);
+        searchButton=getView().findViewById(R.id.searchButtonNew);
         searchButton.setOnClickListener(v -> search(searchCity.getText().toString()));
-        /*MediaPlayer mediaPlayer=MediaPlayer.create(this,R.raw.cool_song_1);
-        mediaPlayer.start();
-        findViewById(R.id.song1).setOnClickListener(v -> songClick("cool_song_1"));
-        findViewById(R.id.song2).setOnClickListener(v -> songClick("cool_song_2"));*/
-
     }
-
-
-
     private void search(String city){
-        TextView temperature=findViewById(R.id.temperature);
-        TextView wind=findViewById(R.id.wind);
+        TextView temperature=getView().findViewById(R.id.temperatureNew);
+        TextView wind=getView().findViewById(R.id.windNew);
         OkHttpClient client=new OkHttpClient();
         String url="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey+"&units=metric";
         Request request=new Request.Builder()
@@ -60,7 +56,7 @@ public class WeatherActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                WeatherActivity.this.runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         temperature.setText("Cant find this city");
@@ -72,14 +68,11 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.isSuccessful()){
-                    WeatherActivity.this.runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 JSONObject result = new JSONObject(response.body().string());
-                        /*System.out.println(result.getString("name"));
-                        System.out.println(result.getString("cod"));
-                        System.out.println(result.getString("clouds"));*/
                                 temperature.setText("Температура:"+result.getJSONObject("main").getString("temp"));
                                 wind.setText("Скорость ветра:"+result.getJSONObject("wind").getString("speed"));
                                 temperature.setVisibility(View.VISIBLE);
@@ -91,7 +84,7 @@ public class WeatherActivity extends AppCompatActivity {
                     });
                 }
                 else{
-                    WeatherActivity.this.runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             temperature.setText("Cant find this city!");
@@ -105,19 +98,23 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 
-    /*private class WeatherTask extends AsyncTask<Void, Void, Void> {
 
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        SlideshowViewModel slideshowViewModel =
+                new ViewModelProvider(this).get(SlideshowViewModel.class);
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String[]response;
-            try {
-                response= new URL(Charsets.UTF_8,"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}");
-            }
-            catch (Exception e){
-                response=null;
-            }
-            return null;
-        }
-    }*/
+        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        //final TextView textView = binding.textSlideshow;
+        //slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

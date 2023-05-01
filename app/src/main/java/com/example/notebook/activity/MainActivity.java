@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onAuthSuccess(FirebaseUser user) {
         String id=user.getUid();
-        Intent intent = new Intent(this, ChangeActivity.class);
+        Intent intent = new Intent(this, MenuActivity.class);
         intent.putExtra("userId", id);          //load user data by id in next activity
         startActivity(intent);
     }
