@@ -52,6 +52,12 @@ public class ChangeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void weather() {
+        Intent intent = new Intent(this, WeatherActivity.class);
+        startActivity(intent);
+    }
+
+
     private void init() {
         EditText eText = findViewById(R.id.birthdayEdit);
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -88,6 +94,9 @@ public class ChangeActivity extends AppCompatActivity {
 
         Button musicPlayer=findViewById(R.id.musicPlayer);
         musicPlayer.setOnClickListener(v -> musicPlayer());
+
+        Button weather=findViewById(R.id.weather);
+        weather.setOnClickListener(v -> weather());
     }
 
     private void writeDetails(UserDetails details) {
