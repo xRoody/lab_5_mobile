@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,8 @@ import com.example.notebook.R;
 import com.example.notebook.activity.MusicFragment;
 import com.example.notebook.databinding.FragmentGalleryBinding;
 
+import java.util.Arrays;
+
 public class GalleryFragment extends Fragment {
     MusicFragment musicFragment;
 
@@ -24,8 +29,16 @@ public class GalleryFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view,@Nullable Bundle savedInstanceState){
-        getView().findViewById(R.id.song1new).setOnClickListener(v -> songClick("cool_song_1"));
-        getView().findViewById(R.id.song2new).setOnClickListener(v -> songClick("cool_song_2"));
+        LinearLayout scrollView = view.findViewById(R.id.list);
+        Arrays.stream(R.raw.class.getDeclaredFields()).forEach(x->{
+            Button button = new Button(view.getContext());
+            button.setId(View.generateViewId());
+            button.setText(x.getName());
+            button.setWidth(200);
+            button.setHeight(50);
+            button.setOnClickListener(v->songClick(x.getName()));
+            scrollView.addView(button);
+        });
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -35,8 +48,6 @@ public class GalleryFragment extends Fragment {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        //final TextView textView = binding.textGallery;
-        //galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
     public void songClick(String song){

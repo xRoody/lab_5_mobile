@@ -3,6 +3,9 @@ package com.example.notebook.activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
+import android.view.View;
+import android.widget.Button;
+import android.widget.ScrollView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,6 +14,8 @@ import com.example.notebook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
+
 
 public class MusicActivity extends AppCompatActivity {
 
@@ -18,10 +23,16 @@ public class MusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
-        /*MediaPlayer mediaPlayer=MediaPlayer.create(this,R.raw.cool_song_1);
-        mediaPlayer.start();*/
-        findViewById(R.id.song1).setOnClickListener(v -> songClick("cool_song_1"));
-        findViewById(R.id.song2).setOnClickListener(v -> songClick("cool_song_2"));
+        ScrollView scrollView = findViewById(R.id.list);
+        Arrays.stream(R.raw.class.getDeclaredFields()).forEach(x->{
+            Button button = new Button(this);
+            button.setId(View.generateViewId());
+            button.setText(x.getName());
+            button.setWidth(200);
+            button.setHeight(50);
+            button.setOnClickListener(v->songClick(x.getName()));
+            scrollView.addView(button);
+        });
     }
 
 
