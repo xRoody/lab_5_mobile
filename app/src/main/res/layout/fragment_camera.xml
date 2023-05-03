@@ -31,10 +31,12 @@
         >
             <Button
                     android:text="Upload avatar"
+                    android:background="#30E39B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/upload" android:layout_weight="1"/>
             <Button
                     android:text="Make a photo"
+                    android:background="#30E39B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/photo"
                     android:layout_weight="1"

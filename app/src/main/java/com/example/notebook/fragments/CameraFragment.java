@@ -92,7 +92,7 @@ public class CameraFragment extends Fragment {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         img = baos.toByteArray();
-        getArguments().putByteArray("ing", img);
+        getArguments().putByteArray("img", img);
     }
 
 

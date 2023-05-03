@@ -55,7 +55,7 @@ public class RegistrationActivity extends AppCompatActivity {
             int year = cldr.get(Calendar.YEAR);
             DatePickerDialog picker = new DatePickerDialog(RegistrationActivity.this,
                     (view, year1, monthOfYear, dayOfMonth) ->
-                            eText.setText(year1 + "-" + ((monthOfYear + 1) < 10 ? "0" + (monthOfYear + 1) : (monthOfYear + 1)) + "-" + (day < 10 ? "0" + day : day)), year, month, day);
+                            eText.setText(year1 + "-" + ((monthOfYear + 1) < 10 ? ("0" + (monthOfYear + 1)) : (monthOfYear + 1)) + "-" + (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth)), year, month, day);
             picker.show();
         });
         Button submit = findViewById(R.id.submitReg);

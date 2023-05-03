@@ -16,7 +16,7 @@
         android:hint="Введите город"
         android:inputType="text"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/temperature"
+        app:layout_constraintBottom_toTopOf="@+id/temperatureNew"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="574dp"
         android:text="Найти"
+        android:background="#30E39B"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +57,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/temperature"
+        app:layout_constraintTop_toBottomOf="@+id/temperatureNew"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
